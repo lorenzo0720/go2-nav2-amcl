@@ -10,3 +10,17 @@ __pycache__/
 # Editor
 .vscode/
 *.swp
+
+# URDF history (auto-generated backups)
+src/go2_description/urdf/.history/
+
+# Backup files
+*.bak
+*.bak2
+*.bak3
+
+# Docker volumes
+maps/
+
+# user scripts
+操作步骤.md
