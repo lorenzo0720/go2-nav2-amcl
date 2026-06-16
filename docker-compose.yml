@@ -1,0 +1,33 @@
+# docker-compose.yml for Go2 ROS 2 Navigation
+# Start: docker compose up -d
+# Enter: docker compose exec go2-nav bash
+---
+services:
+  go2-nav:
+    build: .
+    image: go2-nav2-amcl:humble
+    container_name: go2-nav2-amcl
+    network_mode: host
+    stdin_open: true
+    tty: true
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - CYCLONEDDS_URI=file:///opt/cyclonedds_cfg/cyclonedds.xml
+      - RCUTILS_COLORIZED_OUTPUT=1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - ./src:/ws/src:rw
+      - ./maps:/ws/maps:rw
+    working_dir: /ws
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    command: ["/bin/bash"]
