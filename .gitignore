@@ -24,3 +24,6 @@ maps/
 
 # user scripts
 操作步骤.md
+
+# External dependency (clone separately)
+unitree_ros2/

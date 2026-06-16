@@ -20,6 +20,7 @@ RUN apt update && apt install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy and build unitree_ros2 (for unitree_go, unitree_api messages)
+# 如果构建失败，先克隆: git clone https://github.com/unitreerobotics/unitree_ros2.git unitree_ros2
 COPY unitree_ros2 /opt/unitree_ros2
 RUN cd /opt/unitree_ros2/cyclonedds_ws \
     && rm -rf build install log \

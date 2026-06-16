@@ -30,10 +30,10 @@ def generate_launch_description():
         'params_file', default=os.path.join(get_nav2_pkg, 'config', 'nav2_params.yaml'))
     rviz_config_dir = os.path.join(get_bringup_pkg, 'rviz', 'nav2_default_view.rviz')
 
-    # 包含nav2的launch文件
+    # 包含nav2的launch文件 (autostart=false → 用自己的 lifecycle_manager)
     nav2_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(get_bringup_pkg, "launch", "navigation_launch.py")),
-        launch_arguments=[("params_file", nav2_param_path), ("use_sim_time", use_sim_time), ("map", map_yaml_path)]
+        launch_arguments=[("params_file", nav2_param_path), ("use_sim_time", use_sim_time), ("map", map_yaml_path), ("autostart", "false")]
     )
 
     # --- map_server ---
@@ -58,7 +58,7 @@ def generate_launch_description():
         parameters=[nav2_param_path, {'use_sim_time': use_sim_time}]
     )
 
-    # --- lifecycle_manager ---
+    # --- lifecycle_manager (统一管理所有导航节点) ---
     lifecycle_manager = Node(
         package='nav2_lifecycle_manager',
         executable='lifecycle_manager',
@@ -67,7 +67,10 @@ def generate_launch_description():
         parameters=[{
             'use_sim_time': use_sim_time,
             'autostart': True,
-            'node_names': ['map_server', 'amcl']
+            'node_names': ['map_server', 'amcl',
+                           'controller_server', 'smoother_server', 'planner_server',
+                           'behavior_server', 'bt_navigator', 'waypoint_follower',
+                           'velocity_smoother']
         }]
     )
 
